@@ -1,0 +1,22 @@
+import store from '../store'
+import { fetchGalaxy } from '../actions'
+
+class {
+  onMount() {
+    store.subscribe(this.handleStore = this.handleStore.bind(this))
+
+    store.dispatch(fetchGalaxy())
+  }
+  handleStore() {
+    this.forceUpdate()
+  }
+  onDestroy() {
+    store.unsubscribe(handleStore)
+  }
+  dispatch(type) {
+    store.dispatch(fetchGalaxy())
+  }
+}
+
+div -- ${JSON.stringify(input)}
+  button on-click('dispatch', 'FETCH_GALAXY')

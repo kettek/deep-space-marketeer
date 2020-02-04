@@ -1,0 +1,12 @@
+import store from './store'
+import { fetchGalaxy } from './actions'
+
+class {
+  onMount() {
+    store.subscribe(() => {
+      this.forceUpdate()
+    })
+  }
+}
+
+Game(store.getState())
