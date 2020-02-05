@@ -20,6 +20,7 @@
         "webpack-cli": "^3.3.10"
     },
     "dependencies": {
+        "cordova-android": "^7.1.4",
         "cordova-browser": "^5.0.4",
         "cordova-plugin-webpack": "^0.4.7",
         "cordova-plugin-whitelist": "^1.3.4",
@@ -32,7 +33,8 @@
             "cordova-plugin-webpack": {}
         },
         "platforms": [
-            "browser"
+            "browser",
+            "android"
         ]
     }
 }

@@ -1,9 +1,9 @@
 import {
-  API_START,
-  API_END,
-  FETCH_GALAXY,
+  FETCH_GALAXY_DETAILS,
   SET_GALAXY_DETAILS
 } from "../actions/types";
+
+import * as playerDataReducer from './playerData'
 
 export default function(state = {
     isNetworked: false,
@@ -13,23 +13,9 @@ export default function(state = {
   switch (action.type) {
     case SET_GALAXY_DETAILS:
       return { data: action.payload };
-    case API_START:
-      if (action.payload === FETCH_GALAXY) {
-        return {
-          ...state,
-          isLoadingData: true
-        };
-      }
-      break;
-    case API_END:
-      if (action.payload === FETCH_GALAXY) {
-        return {
-          ...state,
-          isLoadingData: false
-        };
-      }
-      break;
     default:
       return state;
   }
 }
+
+export { playerDataReducer }

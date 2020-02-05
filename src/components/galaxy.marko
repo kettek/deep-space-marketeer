@@ -1,7 +1,22 @@
+import galaxyStore from '../store'
+
 class {
+  onMount() {
+    galaxyStore.subscribe(this.handleStore = this.handleStore.bind(this))
+    // Make initial request
+    //galaxyStore.dispatch(
+    //api.request(`/galaxies/${playerData.currentGalaxy}`)
+  }
+  onDestroy() {
+    galaxyStore.unsubscribe(this.handleStore)
+  }
+  handleStore() {
+    this.forceUpdate()
+  }
 }
 
 style {
 }
 
-div.sectionGalaxy -- galaxy view
+$ let galaxyState = galaxyStore.getStore()
+div.sectionGalaxy -- galaxy view ${JSON.stringify(galaxyState)}

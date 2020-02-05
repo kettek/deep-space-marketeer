@@ -1,11 +1,11 @@
 import store from '../store'
-import { fetchGalaxy } from '../actions'
+import { fetchGalaxyDetails } from '../actions'
 
 class {
   onMount() {
     store.subscribe(this.handleStore = this.handleStore.bind(this))
 
-    store.dispatch(fetchGalaxy())
+    store.dispatch(fetchGalaxyDetails())
   }
   handleStore() {
     this.forceUpdate()
@@ -14,7 +14,7 @@ class {
     store.unsubscribe(handleStore)
   }
   dispatch(type) {
-    store.dispatch(fetchGalaxy())
+    store.dispatch(fetchGalaxyDetails())
   }
 }
 

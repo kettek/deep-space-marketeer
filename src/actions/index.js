@@ -1,11 +1,11 @@
-import { API, FETCH_GALAXY, SET_GALAXY_DETAILS } from "./types";
+import { API, FETCH_GALAXY_DETAILS, SET_GALAXY_DETAILS } from "./types";
 
-export function fetchGalaxy() {
+export function fetchGalaxyDetails() {
   return apiAction({
     url: "galaxy",
     onSuccess: setGalaxyDetails,
     onFailure: () => console.log("Error occured loading galaxy"),
-    label: FETCH_GALAXY,
+    label: FETCH_GALAXY_DETAILS,
   });
 }
 
