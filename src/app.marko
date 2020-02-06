@@ -3,8 +3,28 @@ import { router, server } from './api'
 
 class {
   onCreate() {
-    console.log(router)
+    this.state = {
+      isLoading: true,
+    }
+    let pending = 0
+    let loadStep = () => {
+      pending--
+      if (pending <= 0) {
+        this.state.isLoading = false
+      }
+    }
+
     server.use(router)
+
+    pending++
+    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
+      fs.getDirectory('saves', {create: true}, success => {
+        console.log('creating saves/', success)
+        loadStep()
+      }, err => {
+        console.log('creating saves/', err)
+      })
+    })
   }
   onMount() {
     store.subscribe(() => {
@@ -13,6 +33,8 @@ class {
   }
 }
 
+if(state.isLoading)
+  div -- loading...
 if(store.getState().game.inGame)
   Game(store.getState())
 else

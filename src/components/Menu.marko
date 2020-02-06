@@ -5,15 +5,48 @@ class {
   onCreate() {
     this.state = {
       loc: 'main',
+      slots: [],
+      selectedSlot: -1,
+      pendingDeleteSlot: '',
     }
+  }
+  onMount() {
+    this.refreshSaves()
+  }
+  refreshSaves() {
+    console.log('refreshing, yo')
+    // Load saved files into slots.
+    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
+      fs.getDirectory('saves', {create: false}, dir => {
+        let reader = dir.createReader()
+        reader.readEntries(entries => {
+          this.state.slots = []
+          entries.forEach(entry => {
+            if (entry.name.endsWith('.json')) {
+              let saveName = entry.name.slice(0, -5)
+              let exists = this.state.slots.indexOf(saveName)
+              if (exists === -1) {
+                this.state.slots.push(saveName)
+              }
+            }
+          })
+        }, err => {
+          console.log('err', err)
+        })
+      }, err => {
+        console.log('err', err)
+      })
+    }, err => {
+      console.log('main dir err', err)
+    })
   }
   handleMain(act) {
     this.state.loc = act
+    if (act === 'continue') this.refreshSaves()
   }
   handleEmbark(act) {
     if (act === 'embark') {
-      // TODO: dispatch
-      store.dispatch(startGame(-1))
+      store.dispatch(startGame(''))
     } else if (act === 'back') {
       this.state.loc = 'main'
     }
@@ -21,7 +54,35 @@ class {
   handleContinue(act) {
     if (act === 'back') {
       this.state.loc = 'main'
+    } else if (act === 'embark') {
+      if (this.state.selectedSlot < 0 || this.state.selectedSlot >= this.state.slots.length) return
+      store.dispatch(startGame(this.state.slots[this.state.selectedSlot]))
     }
+  }
+  handleSlotSelect(which) {
+    this.state.selectedSlot = which
+  }
+  toggleDeleteMode(slotName) {
+    if (slotName === this.state.pendingDeleteSlot) {
+      this.state.pendingDeleteSlot = ''
+    } else {
+      this.state.pendingDeleteSlot = slotName
+    }
+  }
+  deleteSlot(slotName) {
+    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
+      fs.getFile(`saves/${slotName}.json`, {create: false}, fileEntry => {
+        fileEntry.remove(ok => {
+          this.refreshSaves()
+        }, err => {
+          console.log('deleteSlot', err)
+        })
+      }, err => {
+        console.log('deleteSlot', err)
+      })
+    }, err => {
+      console.log('deleteSlot', err)
+    })
   }
 }
 
@@ -40,6 +101,13 @@ style {
     padding: .5em;
     text-transform: uppercase;
   }
+  .Slots {
+  }
+  .Slots__item {
+  }
+  .Slots__item.-selected {
+    border: 1px solid red;
+  }
 }
 
 if(state.loc === 'main')
@@ -56,7 +124,15 @@ else-if(state.loc === 'embark')
       button.Menu__item on-click('handleEmbark', 'back') -- back
       button.Menu__item on-click('handleEmbark', 'embark') -- embark
 else-if(state.loc === 'continue')
-  div -- TODO: Find all slotXX.json files and list them and their metadata here.
+  div.Slots
+    for|slotName, slotIndex| of=state.slots
+      div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
+        div.Slots__item__name -- ${slotName}
+        if(state.pendingDeleteSlot === slotName)
+          button.Slots__item__cancel on-click('toggleDeleteMode', slotName) -- cancel
+          button.Slots__item__confirm on-click('deleteSlot', slotName) -- confirm
+        else
+          button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- delete
   nav.Menu
     nav.Menu__pair
       button.Menu__item on-click('handleContinue', 'back') -- back
