@@ -1,4 +1,5 @@
 const path = require('path')
+const CSSExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   entry: "./client.js",
@@ -16,7 +17,17 @@ module.exports = {
       {
         test: /\.marko$/,
         loader: "@marko/webpack/loader"
+      },
+      {
+        test: /\.css$/,
+        //use: [CSSExtractPlugin.loader, 'style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader']
       }
     ]
-  }
+  },
+  plugins: [
+    new CSSExtractPlugin({
+      filename: "[name].css"
+    })
+  ]
 };

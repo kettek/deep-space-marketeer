@@ -13,4 +13,7 @@ class {
   }
 }
 
-Game(store.getState())
+if(store.getState().game.inGame)
+  Game(store.getState())
+else
+  Menu

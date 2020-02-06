@@ -1,0 +1,63 @@
+import store from '../store'
+import { startGame } from '../actions/game'
+
+class {
+  onCreate() {
+    this.state = {
+      loc: 'main',
+    }
+  }
+  handleMain(act) {
+    this.state.loc = act
+  }
+  handleEmbark(act) {
+    if (act === 'embark') {
+      // TODO: dispatch
+      store.dispatch(startGame(-1))
+    } else if (act === 'back') {
+      this.state.loc = 'main'
+    }
+  }
+  handleContinue(act) {
+    if (act === 'back') {
+      this.state.loc = 'main'
+    }
+  }
+}
+
+style {
+  .Menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .Menu__pair {
+    display: flex;
+    justify-content: center;
+  }
+  .Menu__item {
+    margin: .5em;
+    padding: .5em;
+    text-transform: uppercase;
+  }
+}
+
+if(state.loc === 'main')
+  nav.Menu
+    button.Menu__item on-click('handleMain', 'embark') -- embark
+    button.Menu__item on-click('handleMain', 'continue') -- continue
+else-if(state.loc === 'embark')
+  div -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
+  label
+    span -- name
+    input value='Player'
+  nav.Menu
+    nav.Menu__pair
+      button.Menu__item on-click('handleEmbark', 'back') -- back
+      button.Menu__item on-click('handleEmbark', 'embark') -- embark
+else-if(state.loc === 'continue')
+  div -- TODO: Find all slotXX.json files and list them and their metadata here.
+  nav.Menu
+    nav.Menu__pair
+      button.Menu__item on-click('handleContinue', 'back') -- back
+      button.Menu__item on-click('handleContinue', 'embark') -- embark
