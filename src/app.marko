@@ -1,7 +1,11 @@
 import store from './store'
-import { fetchGalaxy } from './actions'
+import { router, server } from './api'
 
 class {
+  onCreate() {
+    console.log(router)
+    server.use(router)
+  }
   onMount() {
     store.subscribe(() => {
       this.forceUpdate()

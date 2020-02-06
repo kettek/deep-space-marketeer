@@ -1,11 +1,11 @@
 import store from '../store'
-import { fetchGalaxyDetails } from '../actions'
+import { travelToSystem } from '../actions/galaxy'
 
 class {
   onMount() {
     store.subscribe(this.handleStore = this.handleStore.bind(this))
 
-    store.dispatch(fetchGalaxyDetails())
+    store.dispatch(travelToSystem("Rygel"))
   }
   handleStore() {
     this.forceUpdate()

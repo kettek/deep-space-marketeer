@@ -1,21 +1,16 @@
-import {
-  FETCH_GALAXY_DETAILS,
-  SET_GALAXY_DETAILS
-} from "../actions/types";
+import player from './player'
+import galaxy from './galaxy'
+import system from './system'
+import planet from './planet'
+import shipyard from './shipyard'
+import { combineReducers } from "redux";
 
-import * as playerDataReducer from './playerData'
+const rootReducer = combineReducers({
+  player,
+  galaxy,
+  system,
+  planet,
+  shipyard,
+})
 
-export default function(state = {
-    isNetworked: false,
-    isLoaded: false,
-  }, action) {
-  console.log("action type => ", action.type);
-  switch (action.type) {
-    case SET_GALAXY_DETAILS:
-      return { data: action.payload };
-    default:
-      return state;
-  }
-}
-
-export { playerDataReducer }
+export default rootReducer
