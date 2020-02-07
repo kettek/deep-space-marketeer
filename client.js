@@ -1,7 +1,7 @@
 let appComponent = require('./src/app')
+let fastClick = require('fastclick')
 
 document.addEventListener('deviceready', function() {
-  // promisify native storage
   NativeStorage.getItemPromise = function(reference) {
     return new Promise((resolve, reject) => {
       NativeStorage.getItem(reference, success => {
@@ -39,6 +39,6 @@ document.addEventListener('deviceready', function() {
     })
   }
 
-  // render
   appComponent.renderSync({ name: "Deep Space Marketeer" }).appendTo(document.body)
+  fastClick.attach(document.body)
 }, false);

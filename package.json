@@ -31,6 +31,7 @@
         "cordova-plugin-webpack": "^0.4.7",
         "cordova-plugin-whitelist": "^1.3.4",
         "cordova-promisify": "^1.0.2",
+        "fastclick": "^1.0.6",
         "kakapo": "^4.0.4",
         "marko": "^4.18.39",
         "redux": "^4.0.5",
