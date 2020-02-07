@@ -10,6 +10,13 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   resolve: {
+    alias: {
+      factories: path.resolve(__dirname, 'src/factories'),
+      reducers: path.resolve(__dirname, 'src/reducers'),
+      stores: path.resolve(__dirname, 'src/stores'),
+      actions: path.resolve(__dirname, 'src/actions'),
+      api: path.resolve(__dirname, 'src/api'),
+    },
     extensions: [".js", ".marko"]
   },
   module: {
