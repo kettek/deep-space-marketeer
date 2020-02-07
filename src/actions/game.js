@@ -1,61 +1,52 @@
 export const START_GAME = 'START_GAME'
+import promisify from 'cordova-promisify'
 
-export function startGame(saveName) {
+export function startGame(saveName, shouldCreate=false) {
   return function(dispatch, getState) {
     let state = getState()
     if (state.game.inGame) {
       return
     }
     // TODO: ... load file into nativestorage?
-    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
-      if (saveName === '') {
-        saveName = Date.now()
-      }
-      // Load if exists or create if not
-      fs.getFile(`saves/${saveName}.json`, {create: false}, fileEntry => {
-          fileEntry.file(file => {
-            let fr = new FileReader()
-            fr.onloadend = () => {
-              let profile = JSON.parse(fr.result)
-              console.log(profile)
-              // TODO: dispatch START_GAME with loaded save profile in fr.result
-            }
-            fr.onerror = err => {
-              console.error('reading save', err)
-            }
-            fr.readAsText(file)
-          }, err => {
-            console.error('loading save', err)
+    promisify(window.resolveLocalFileSystemURL)(cordova.file.dataDirectory)
+    .then(fs => promisify(fs.getFile.bind(fs))(`saves/${saveName}.json`, {create: shouldCreate}))
+    .then(fileEntry => {
+      if (shouldCreate) {
+        fileEntry.createWriter(fw => {
+          fw.onwriteend = (e) => {
+            dispatch(startGame(saveName))
+          }
+          fw.onerror = err => {
+            throw err
+          }
+          // TODO: Perhaps load from a factory func like "createPlayer()"
+          let json = JSON.stringify({
+            Player: "test",
           })
-      }, err => {
-        if (err.code !== FileError.NOT_FOUND_ERR) {
-          console.error('checking save', err)
-          return
-        }
-        fs.getFile(`saves/${saveName}.json`, {create: true}, fileEntry => {
-          fileEntry.createWriter(fw => {
-            fw.onwriteend = (e) => {
-              dispatch(startGame(saveName))
-            }
-            fw.onerror = err => {
-              console.error('creating save', err)
-            }
-            // TODO: Perhaps load from a factory func like "createPlayer()"
-            let json = JSON.stringify({
-              Player: "test",
-            })
-            let data = new Blob([json], {type: "application/json"})
-            fw.write(data)
-          })
+          let data = new Blob([json], {type: "application/json"})
+          fw.write(data)
         })
-      })
-    }, err => {
-      console.log('main dir err', err)
+      } else {
+        promisify(fileEntry.file.bind(fileEntry))()
+        .then(file => {
+          let fr = new FileReader()
+          fr.onloadend = () => {
+            let profile = JSON.parse(fr.result)
+            console.log(profile)
+            // TODO: dispatch START_GAME with loaded save profile in fr.result
+          }
+          fr.onerror = err => {
+            throw err
+          }
+          fr.readAsText(file)
+        })
+      }
     })
-    // cordova.file.dataDirectory
-    /*return dispatch({
-      type: START_GAME,
-      saveSlot
-    })*/
+    .catch(err => {
+      if (err.code === FileError.NOT_FOUND_ERR) {
+        return dispatch(startGame(Date.now(), true))
+      }
+      console.error('startGame', err)
+    })
   }
 }
