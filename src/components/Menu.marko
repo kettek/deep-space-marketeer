@@ -8,13 +8,31 @@ class {
       slots: [],
       selectedSlot: -1,
       pendingDeleteSlot: '',
+      closeStars: [],
+      farStars: [],
     }
+    for (let i = 0; i < 100; i++) {
+      this.state.closeStars.push({
+        size: Math.random() * 0.3 + 0.2,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        opacity: Math.random()+'',
+      })
+    }
+    for (let i = 0; i < 200; i++) {
+      this.state.farStars.push({
+        size: Math.random() * 0.2 + 0.2,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+        opacity: Math.random()*0.8+'',
+      })
+    }
+
   }
   onMount() {
     this.refreshSaves()
   }
   refreshSaves() {
-    console.log('refreshing, yo')
     // Load saved files into slots.
     window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
       fs.getDirectory('saves', {create: false}, dir => {
@@ -91,6 +109,7 @@ style {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    color: white;
   }
   .Menu__pair {
     display: flex;
@@ -108,9 +127,63 @@ style {
   .Slots__item.-selected {
     border: 1px solid red;
   }
+  /* shiny stuff */
+  .Menu__title header {
+    background: -webkit-linear-gradient(white, #38495a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 8vw;
+  }
+  .Menu__stars {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+  }
+  .Menu__stars.-scrollingSlow {
+    animation: starScrolling 80s linear infinite;
+  }
+  .Menu__stars.-scrollingFast {
+    animation: starScrolling 40s linear infinite;
+  }
+
+  .Menu__star {
+    position: absolute;
+    background: #fff;
+    border-radius: 1em;
+  }
+  .Menu__Background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+  }
+  @keyframes starScrolling {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(-100%);
+    }
+  }
 }
 
+div.Menu__Background
+  div.Menu__stars.-scrollingFast
+    for|star| of=state.closeStars
+      div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+      div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+  div.Menu__stars.-scrollingSlow
+    for|star| of=state.farStars
+      div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+      div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
 if(state.loc === 'main')
+  div.Menu__title
+    header -- Deep Space Marketeer
   nav.Menu
     button.Menu__item on-click('handleMain', 'embark') -- embark
     button.Menu__item on-click('handleMain', 'continue') -- continue
