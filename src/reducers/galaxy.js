@@ -1,4 +1,4 @@
-import { TRAVEL_TO_SYSTEM } from '../actions/galaxy'
+import { TRAVEL_TO_SYSTEM } from 'actions/galaxy'
 
 function galaxy(state = {
 }, action) {

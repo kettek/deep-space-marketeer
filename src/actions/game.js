@@ -1,6 +1,7 @@
-export const START_GAME = 'START_GAME'
 import promisify from 'cordova-promisify'
+import createPlayer from 'factories/player'
 
+export const START_GAME = 'START_GAME'
 export function startGame(saveName, shouldCreate=false) {
   return function(dispatch, getState) {
     let state = getState()
@@ -19,10 +20,7 @@ export function startGame(saveName, shouldCreate=false) {
           fw.onerror = err => {
             throw err
           }
-          // TODO: Perhaps load from a factory func like "createPlayer()"
-          let json = JSON.stringify({
-            Player: "test",
-          })
+          let json = JSON.stringify(createPlayer())
           let data = new Blob([json], {type: "application/json"})
           fw.write(data)
         })

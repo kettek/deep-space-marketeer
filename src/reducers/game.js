@@ -1,4 +1,4 @@
-import { START_GAME } from '../actions/game'
+import { START_GAME } from 'actions/game'
 
 function game(state = {
   inGame: false,
