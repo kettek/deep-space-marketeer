@@ -1,5 +1,6 @@
 import store from '../store'
 import { startGame } from 'actions/game'
+import pkg from '../../package.json'
 
 class {
   onCreate() {
@@ -108,8 +109,16 @@ style {
   .Menu {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     color: white;
+  }
+  .Menu__description {
+    padding: .5em;
+    margin: .5em;
+    text-shadow: 0 0 1em blue;
+    box-shadow: 0 0 .1em white;
+    background: rgba(0, 0, 0, 0.75);
   }
   .Menu__pair {
     display: flex;
@@ -120,6 +129,18 @@ style {
     padding: .5em;
     text-transform: uppercase;
   }
+  .Menu__Main, .Menu__Embark, .Menu__Continue {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    animation: fadeIn 300ms linear 1 forwards;
+  }
+  .Menu__Main.-hidden, .Menu__Embark.-hidden, .Menu__Continue.-hidden {
+    animation-name: fadeOut;
+    pointer-events: none;
+  }
   .Slots {
   }
   .Slots__item {
@@ -128,7 +149,7 @@ style {
     border: 1px solid red;
   }
   /* shiny stuff */
-  .Menu__title header {
+  .Menu__Main header {
     background: -webkit-linear-gradient(white, #38495a);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -170,6 +191,22 @@ style {
       transform: translateY(-100%);
     }
   }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 }
 
 div.Menu__Background
@@ -181,22 +218,19 @@ div.Menu__Background
     for|star| of=state.farStars
       div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
       div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
-if(state.loc === 'main')
-  div.Menu__title
-    header -- Deep Space Marketeer
-  nav.Menu
-    button.Menu__item on-click('handleMain', 'embark') -- embark
-    button.Menu__item on-click('handleMain', 'continue') -- continue
-else-if(state.loc === 'embark')
-  div -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
+Frame active=(state.loc === 'main') slide='right' duration=100
+  header -- ${pkg.displayName}
+  button.Menu__item on-click('handleMain', 'embark') -- embark
+  button.Menu__item on-click('handleMain', 'continue') -- continue
+Frame active=(state.loc === 'embark') slide='left'
+  div.Menu__description -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
   label
     span -- name
     input value='Player'
-  nav.Menu
-    nav.Menu__pair
-      button.Menu__item on-click('handleEmbark', 'back') -- back
-      button.Menu__item on-click('handleEmbark', 'embark') -- embark
-else-if(state.loc === 'continue')
+  nav.Menu__pair
+    button.Menu__item on-click('handleEmbark', 'back') -- back
+    button.Menu__item on-click('handleEmbark', 'embark') -- embark
+Frame active=(state.loc === 'continue') slide='left'
   div.Slots
     for|slotName, slotIndex| of=state.slots
       div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
@@ -206,7 +240,6 @@ else-if(state.loc === 'continue')
           button.Slots__item__confirm on-click('deleteSlot', slotName) -- confirm
         else
           button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- delete
-  nav.Menu
-    nav.Menu__pair
-      button.Menu__item on-click('handleContinue', 'back') -- back
-      button.Menu__item on-click('handleContinue', 'embark') -- embark
+  nav.Menu__pair
+    button.Menu__item on-click('handleContinue', 'back') -- back
+    button.Menu__item on-click('handleContinue', 'embark') -- embark
