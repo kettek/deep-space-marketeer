@@ -26,6 +26,34 @@ class {
   }
 }
 
+style {
+  @font-face {
+    font-family: 'Abel-Regular';
+    src: url('/fonts/Abel-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+  body {
+    color: white;
+    font-size: 5vmin;
+    overflow: hidden;
+  }
+  body, input, textarea, button {
+    font-family: 'Abel-Regular';
+    font-weight: bold;
+  }
+  button {
+    font-size: 1em;
+    padding: .5em;
+    margin: .5em;
+    color: white;
+    text-shadow: 0 0 1em blue;
+    box-shadow: 0 0 .1em white;
+    background: rgba(0, 0, 0, 0.75);
+
+  }
+}
+
 if(state.isLoading)
   div -- loading...
 if(store.getState().game.inGame)
