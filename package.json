@@ -1,6 +1,7 @@
 {
     "name": "star-runner",
     "displayName": "Star Runner",
+    "copyright": "(c) 2020 kettek",
     "version": "0.0.0",
     "description": "",
     "main": "index.js",
