@@ -42,6 +42,10 @@ style {
     font-family: 'Abel-Regular';
     font-weight: bold;
   }
+  input {
+    font-size: 1em;
+    padding: .5em;
+  }
   button {
     font-size: 1em;
     padding: .5em;
@@ -57,6 +61,6 @@ style {
 if(state.isLoading)
   div -- loading...
 if(store.getState().game.inGame)
-  Game(store.getState())
+  Game ...store.getState()
 else
   Menu
