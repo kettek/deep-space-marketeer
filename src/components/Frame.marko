@@ -4,7 +4,7 @@ class {
       active: false,
       hidden: true,
       transitioning: false,
-      duration: 100,
+      duration: 300,
     }
   }
   onInput(input) {
@@ -48,7 +48,7 @@ style {
     box-sizing: border-box;
   }
   .Frame.-slideLeft.-inactive {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
   .Frame.-slideLeft.-inactive.-transitioning {
     transform: translateX(100%);
@@ -57,10 +57,10 @@ style {
     transform: translateX(0);
   }
   .Frame.-slideLeft.-active.-transitioning {
-    transform: translateX(100%);
+    transform: translateX(0);
   }
   .Frame.-slideRight.-inactive {
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
   .Frame.-slideRight.-inactive.-transitioning {
     transform: translateX(-100%);
@@ -69,7 +69,7 @@ style {
     transform: translateX(0);
   }
   .Frame.-slideRight.-active.-transitioning {
-    transform: translateX(-100%);
+    transform: translateX(0);
   }
   .Frame.-fade.-inactive {
     opacity: 0;
@@ -82,7 +82,7 @@ style {
   }
 
   .Frame.-inactive {
-    display: none;
+    visibility: collapse;
     pointer-events: none;
   }
   .Frame.-active {
@@ -91,6 +91,7 @@ style {
   .Frame.-transitioning.-active {
   }
   .Frame.-transitioning.-inactive {
+    visibility: visible;
   }
 }
 
