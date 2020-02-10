@@ -1,0 +1,106 @@
+class {
+  onCreate() {
+    this.state = {
+      active: false,
+      hidden: true,
+      transitioning: false,
+      duration: 100,
+    }
+  }
+  onInput(input) {
+    if (input.duration !== undefined) {
+      this.state.duration = input.duration
+    }
+    if (input.active && !this.state.active) {
+      this.startTransitionIn()
+    } else if (!input.active && this.state.active) {
+      this.startTransitionOut()
+    }
+  }
+  startTransitionIn() {
+    if (this.state.transitioning) return
+    this.state.transitioning = true
+    this.state.active = true
+    setTimeout(() => {
+      this.state.transitioning = false
+    }, this.state.duration)
+  }
+  startTransitionOut() {
+    if (this.state.transitioning) return
+    this.state.transitioning = true
+    this.state.active = false
+    setTimeout(() => {
+      this.state.transitioning = false
+    }, this.state.duration)
+  }
+}
+
+style {
+  .Frame {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    transition: all 300ms;
+  }
+  .Frame.-slideLeft.-inactive {
+    transform: translateX(-100%);
+  }
+  .Frame.-slideLeft.-inactive.-transitioning {
+    transform: translateX(100%);
+  }
+  .Frame.-slideLeft.-active {
+    transform: translateX(0);
+  }
+  .Frame.-slideLeft.-active.-transitioning {
+    transform: translateX(100%);
+  }
+  .Frame.-slideRight.-inactive {
+    transform: translateX(100%);
+  }
+  .Frame.-slideRight.-inactive.-transitioning {
+    transform: translateX(-100%);
+  }
+  .Frame.-slideRight.-active {
+    transform: translateX(0);
+  }
+  .Frame.-slideRight.-active.-transitioning {
+    transform: translateX(-100%);
+  }
+  .Frame.-fade.-inactive {
+    opacity: 0;
+  }
+  .Frame.-fade.-active {
+    opacity: 1;
+  }
+  .Frame.-fade.-active.-transitioning {
+    opacity: 0;
+  }
+
+  .Frame.-inactive {
+    display: none;
+    pointer-events: none;
+  }
+  .Frame.-active {
+    display: block;
+    pointer-events: auto;
+  }
+  .Frame.-transitioning.-active {
+    display: block;
+  }
+  .Frame.-transitioning.-inactive {
+    display: block;
+  }
+}
+
+section.Frame class={
+  '-active': state.active,
+  '-inactive': !state.active,
+  '-transitioning': state.transitioning,
+  '-slideLeft': input.slide==='left',
+  '-slideRight': input.slide==='right',
+  '-fade': input.fade,
+} style={'transition-duration': state.duration+'ms'}
+  <${input.renderBody}/>
