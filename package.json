@@ -1,6 +1,6 @@
 {
-    "name": "net.kettek.deepspacemarketeer",
-    "displayName": "deep-space-marketeer",
+    "name": "star-runner",
+    "displayName": "Star Runner",
     "version": "0.0.0",
     "description": "",
     "main": "index.js",
