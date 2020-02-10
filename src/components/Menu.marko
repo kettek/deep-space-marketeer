@@ -185,11 +185,15 @@ style {
   .Menu__Main {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr 1fr auto;
+    grid-template-rows: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
     grid-gap: 1em;
   }
   .Menu__Main header {
     text-align: center;
+    background-image: url(/images/star-runner.svg);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
   }
   .Menu__Main footer {
     font-size: .75em;
@@ -210,12 +214,6 @@ style {
     border: 1px solid red;
   }
   /* shiny stuff */
-  .Menu__Main header {
-    background: -webkit-linear-gradient(white, #38495a);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 8vw;
-  }
   .Menu__stars {
     position: absolute;
     width: 100vw;
@@ -273,7 +271,7 @@ section.Menu
         div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
         div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
   Frame active=(state.loc === 'main') slide='right' duration=300 class='Menu__Main'
-    header -- ${pkg.displayName}
+    header
     button.Menu__item on-click('handleMain', 'embark') -- embark
     button.Menu__item on-click('handleMain', 'continue') -- continue
     footer -- ${pkg.copyright}
