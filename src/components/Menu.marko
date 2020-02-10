@@ -11,7 +11,30 @@ class {
       pendingDeleteSlot: '',
       closeStars: [],
       farStars: [],
+      captainName: '',
     }
+    this.captains = [
+      'Picard',
+      'Kirk',
+      'Sisko',
+      'Janeway',
+      'Solo',
+      'Reynolds',
+      'Adama',
+      'Leela',
+      'Brannigan',
+      'Bowman',
+      'Beeblebrox',
+      'Robinson',
+      'Khan',
+      'Hollister',
+      'Dallas',
+      'Rogers',
+      'Atomsk',
+      'Brak',
+      'Riddick',
+      'Jet',
+    ]
     for (let i = 0; i < 100; i++) {
       this.state.closeStars.push({
         size: Math.random() * 0.3 + 0.2,
@@ -61,6 +84,7 @@ class {
   }
   handleMain(act) {
     this.state.loc = act
+    this.state.captainName = this.captains[Math.floor(Math.random()*this.captains.length)]
     if (act === 'continue') this.refreshSaves()
   }
   handleEmbark(act) {
@@ -112,6 +136,7 @@ style {
     justify-content: space-between;
     align-items: center;
     color: white;
+    animation: fadeIn 1s;
   }
   .Menu__description {
     padding: .5em;
@@ -129,6 +154,25 @@ style {
     margin: .5em;
     padding: .5em;
     text-transform: uppercase;
+  }
+  .Menu__inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    padding: .5em;
+  }
+  .Menu__inputs label {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 3fr;
+  }
+  .Menu__inputs label span {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    text-transform: uppercase;
+    padding: .5em;
   }
   .Menu__Main, .Menu__Embark, .Menu__Continue {
     position: absolute;
@@ -208,40 +252,53 @@ style {
       transform: translateY(-100%);
     }
   }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
-div.Menu__Background
-  div.Menu__stars.-scrollingFast
-    for|star| of=state.closeStars
-      div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
-      div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
-  div.Menu__stars.-scrollingSlow
-    for|star| of=state.farStars
-      div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
-      div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
-Frame active=(state.loc === 'main') slide='right' duration=100 class='Menu__Main'
-  header -- ${pkg.displayName}
-  button.Menu__item on-click('handleMain', 'embark') -- embark
-  button.Menu__item on-click('handleMain', 'continue') -- continue
-  footer -- ${pkg.copyright}
-Frame active=(state.loc === 'embark') slide='left' class='Menu__Embark'
-  div.Menu__description -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
-  label
-    span -- name
-    input value='Player'
-  nav.Menu__pair
-    button.Menu__item on-click('handleEmbark', 'back') -- back
-    button.Menu__item on-click('handleEmbark', 'embark') -- embark
-Frame active=(state.loc === 'continue') slide='left' class='Menu__Continue'
-  div.Slots
-    for|slotName, slotIndex| of=state.slots
-      div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
-        div.Slots__item__name -- ${slotName}
-        if(state.pendingDeleteSlot === slotName)
-          button.Slots__item__cancel on-click('toggleDeleteMode', slotName) -- cancel
-          button.Slots__item__confirm on-click('deleteSlot', slotName) -- confirm
-        else
-          button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- delete
-  nav.Menu__pair
-    button.Menu__item on-click('handleContinue', 'back') -- back
-    button.Menu__item on-click('handleContinue', 'embark') -- embark
+section.Menu
+  div.Menu__Background
+    div.Menu__stars.-scrollingFast
+      for|star| of=state.closeStars
+        div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+        div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+    div.Menu__stars.-scrollingSlow
+      for|star| of=state.farStars
+        div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+        div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
+  Frame active=(state.loc === 'main') slide='right' duration=300 class='Menu__Main'
+    header -- ${pkg.displayName}
+    button.Menu__item on-click('handleMain', 'embark') -- embark
+    button.Menu__item on-click('handleMain', 'continue') -- continue
+    footer -- ${pkg.copyright}
+  Frame active=(state.loc === 'embark') slide='left' class='Menu__Embark'
+    div.Menu__description -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
+    div.Menu__inputs
+      label
+        span -- captain
+        input placeholder=state.captainName
+      label
+        span -- ship
+        input placeholder='Runner'
+    nav.Menu__pair
+      button.Menu__item on-click('handleEmbark', 'back') -- back
+      button.Menu__item on-click('handleEmbark', 'embark') -- embark
+  Frame active=(state.loc === 'continue') slide='left' class='Menu__Continue'
+    div.Slots
+      for|slotName, slotIndex| of=state.slots
+        div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
+          div.Slots__item__name -- ${slotName}
+          if(state.pendingDeleteSlot === slotName)
+            button.Slots__item__cancel on-click('toggleDeleteMode', slotName) -- cancel
+            button.Slots__item__confirm on-click('deleteSlot', slotName) -- confirm
+          else
+            button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- delete
+    nav.Menu__pair
+      button.Menu__item on-click('handleContinue', 'back') -- back
+      button.Menu__item on-click('handleContinue', 'embark') -- embark
