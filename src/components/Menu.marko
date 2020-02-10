@@ -33,8 +33,8 @@ class {
     this.refreshSaves()
   }
   refreshSaves() {
-    // Load saved files into slots.
-    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
+    // TODO: Load saved files into slots.
+    /*window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
       fs.getDirectory('saves', {create: false}, dir => {
         let reader = dir.createReader()
         reader.readEntries(entries => {
@@ -56,7 +56,7 @@ class {
       })
     }, err => {
       console.log('main dir err', err)
-    })
+    })*/
   }
   handleMain(act) {
     this.state.loc = act
@@ -88,7 +88,7 @@ class {
     }
   }
   deleteSlot(slotName) {
-    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
+    /*window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
       fs.getFile(`saves/${slotName}.json`, {create: false}, fileEntry => {
         fileEntry.remove(ok => {
           this.refreshSaves()
@@ -100,7 +100,7 @@ class {
       })
     }, err => {
       console.log('deleteSlot', err)
-    })
+    })*/
   }
 }
 

@@ -36,5 +36,10 @@ module.exports = {
     new CSSExtractPlugin({
       filename: "[name].css"
     })
-  ]
+  ],
+  devServer: {
+    contentBase: path.join(__dirname, 'www'),
+    compress: true,
+    port: 9000
+  }
 };

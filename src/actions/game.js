@@ -1,4 +1,3 @@
-import promisify from 'cordova-promisify'
 import createPlayer from 'factories/player'
 
 export const START_GAME = 'START_GAME'
@@ -9,7 +8,7 @@ export function startGame(saveName, shouldCreate=false) {
       return
     }
     // TODO: ... load file into nativestorage?
-    promisify(window.resolveLocalFileSystemURL)(cordova.file.dataDirectory)
+    /*promisify(window.resolveLocalFileSystemURL)(cordova.file.dataDirectory)
     .then(fs => promisify(fs.getFile.bind(fs))(`saves/${saveName}.json`, {create: shouldCreate}))
     .then(fileEntry => {
       if (shouldCreate) {
@@ -45,6 +44,6 @@ export function startGame(saveName, shouldCreate=false) {
         return dispatch(startGame(Date.now(), true))
       }
       console.error('startGame', err)
-    })
+    })*/
   }
 }

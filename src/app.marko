@@ -16,15 +16,8 @@ class {
 
     server.use(router)
 
-    pending++
-    window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
-      fs.getDirectory('saves', {create: true}, success => {
-        console.log('creating saves/', success)
-        loadStep()
-      }, err => {
-        console.log('creating saves/', err)
-      })
-    })
+    // TODO: Implement requesting file system & create saves
+    loadStep()
   }
   onMount() {
     store.subscribe(() => {
