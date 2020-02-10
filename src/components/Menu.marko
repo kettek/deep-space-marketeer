@@ -119,6 +119,7 @@ style {
     text-shadow: 0 0 1em blue;
     box-shadow: 0 0 .1em white;
     background: rgba(0, 0, 0, 0.75);
+    overflow: auto;
   }
   .Menu__pair {
     display: flex;
@@ -137,9 +138,25 @@ style {
     height: 100%;
     animation: fadeIn 300ms linear 1 forwards;
   }
-  .Menu__Main.-hidden, .Menu__Embark.-hidden, .Menu__Continue.-hidden {
-    animation-name: fadeOut;
-    pointer-events: none;
+  .Menu__Main {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr 1fr auto;
+    grid-gap: 1em;
+  }
+  .Menu__Main header {
+    text-align: center;
+  }
+  .Menu__Main footer {
+    font-size: .75em;
+    text-align: center;
+    opacity: 0.5;
+  }
+  .Menu__Embark {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    grid-gap: 1em;
   }
   .Slots {
   }
@@ -191,22 +208,6 @@ style {
       transform: translateY(-100%);
     }
   }
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  @keyframes fadeOut {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
 }
 
 div.Menu__Background
@@ -218,11 +219,12 @@ div.Menu__Background
     for|star| of=state.farStars
       div.Menu__star style={left: star.left+'vw', top: star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
       div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
-Frame active=(state.loc === 'main') slide='right' duration=100
+Frame active=(state.loc === 'main') slide='right' duration=100 class='Menu__Main'
   header -- ${pkg.displayName}
   button.Menu__item on-click('handleMain', 'embark') -- embark
   button.Menu__item on-click('handleMain', 'continue') -- continue
-Frame active=(state.loc === 'embark') slide='left'
+  footer -- ${pkg.copyright}
+Frame active=(state.loc === 'embark') slide='left' class='Menu__Embark'
   div.Menu__description -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
   label
     span -- name
@@ -230,7 +232,7 @@ Frame active=(state.loc === 'embark') slide='left'
   nav.Menu__pair
     button.Menu__item on-click('handleEmbark', 'back') -- back
     button.Menu__item on-click('handleEmbark', 'embark') -- embark
-Frame active=(state.loc === 'continue') slide='left'
+Frame active=(state.loc === 'continue') slide='left' class='Menu__Continue'
   div.Slots
     for|slotName, slotIndex| of=state.slots
       div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
