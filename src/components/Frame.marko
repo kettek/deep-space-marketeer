@@ -44,6 +44,8 @@ style {
     height: 100%;
     overflow: auto;
     transition: all 300ms;
+    padding: 1em;
+    box-sizing: border-box;
   }
   .Frame.-slideLeft.-inactive {
     transform: translateX(-100%);
@@ -84,23 +86,21 @@ style {
     pointer-events: none;
   }
   .Frame.-active {
-    display: block;
     pointer-events: auto;
   }
   .Frame.-transitioning.-active {
-    display: block;
   }
   .Frame.-transitioning.-inactive {
-    display: block;
   }
 }
 
-section.Frame class={
-  '-active': state.active,
-  '-inactive': !state.active,
-  '-transitioning': state.transitioning,
-  '-slideLeft': input.slide==='left',
-  '-slideRight': input.slide==='right',
-  '-fade': input.fade,
-} style={'transition-duration': state.duration+'ms'}
+section.Frame class=[
+  input.class,
+  state.active?'-active':null,
+  !state.active?'-inactive':null,
+  state.transitioning?'-transitioning':null,
+  input.slide==='left'?'-slideLeft':null,
+  input.slide==='right'?'-slideRight':null,
+  input.fade?'-fade':null,
+ ] style={'transition-duration': state.duration+'ms'}
   <${input.renderBody}/>
