@@ -18,6 +18,7 @@ class {
       }
     }
 
+    pending++
     i18next
     .use(Fetch)
     .use(LanguageDetector)
@@ -33,13 +34,13 @@ class {
       detection: {
       }
     }, (err, t) => {
-      console.log(err, t)
+      // TODO: refresh UI
+      loadStep()
     })
 
     server.use(router)
 
     // TODO: Implement requesting file system & create saves
-    loadStep()
   }
   onMount() {
     store.subscribe(() => {
@@ -82,7 +83,7 @@ style {
 
 if(state.isLoading)
   div -- loading...
-if(store.getState().game.inGame)
+else-if(store.getState().game.inGame)
   Game ...store.getState()
 else
   Menu
