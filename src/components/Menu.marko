@@ -1,5 +1,6 @@
 import store from '../store'
 import { startGame } from 'actions/game'
+import i18next from 'i18next'
 import pkg from '../../package.json'
 
 class {
@@ -272,31 +273,31 @@ section.Menu
         div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
   Frame active=(state.loc === 'main') slide='right' duration=300 class='Menu__Main'
     header
-    button.Menu__item on-click('handleMain', 'embark') -- embark
-    button.Menu__item on-click('handleMain', 'continue') -- continue
+    button.Menu__item on-click('handleMain', 'embark') -- ${i18next.t('menu:button.embark')}
+    button.Menu__item on-click('handleMain', 'continue') -- ${i18next.t('menu:button.continue')}
     footer -- ${pkg.copyright}
   Frame active=(state.loc === 'embark') slide='left' class='Menu__Embark'
-    div.Menu__description -- The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!
+    div.Menu__description -- ${i18next.t('menu:description')}
     div.Menu__inputs
       label
-        span -- captain
+        span -- ${i18next.t('menu:label.captain')}
         input placeholder=state.captainName
       label
-        span -- ship
+        span -- ${i18next.t('menu:label.ship')}
         input placeholder='Runner'
     nav.Menu__pair
-      button.Menu__item on-click('handleEmbark', 'back') -- back
-      button.Menu__item on-click('handleEmbark', 'embark') -- embark
+      button.Menu__item on-click('handleEmbark', 'back') -- ${i18next.t('menu:button.back')}
+      button.Menu__item on-click('handleEmbark', 'embark') -- ${i18next.t('menu:button.embark')}
   Frame active=(state.loc === 'continue') slide='left' class='Menu__Continue'
     div.Slots
       for|slotName, slotIndex| of=state.slots
         div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
           div.Slots__item__name -- ${slotName}
           if(state.pendingDeleteSlot === slotName)
-            button.Slots__item__cancel on-click('toggleDeleteMode', slotName) -- cancel
-            button.Slots__item__confirm on-click('deleteSlot', slotName) -- confirm
+            button.Slots__item__cancel on-click('toggleDeleteMode', slotName) -- ${i18next.t('menu:button.cancel')}
+            button.Slots__item__confirm on-click('deleteSlot', slotName) -- ${i18next.t('menu:button.confirm')}
           else
-            button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- delete
+            button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- ${i18next.t('menu:button.delete')}
     nav.Menu__pair
-      button.Menu__item on-click('handleContinue', 'back') -- back
-      button.Menu__item on-click('handleContinue', 'embark') -- embark
+      button.Menu__item on-click('handleContinue', 'back') -- ${i18next.t('menu:button.back')}
+      button.Menu__item on-click('handleContinue', 'embark') -- ${i18next.t('menu:button.embark')}

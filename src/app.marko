@@ -1,6 +1,10 @@
 import store from './store'
 import { router, server } from './api'
 
+import i18next from 'i18next'
+import Fetch from 'i18next-fetch-backend';
+import LanguageDetector from 'i18next-browser-languagedetector'
+
 class {
   onCreate() {
     this.state = {
@@ -13,6 +17,24 @@ class {
         this.state.isLoading = false
       }
     }
+
+    i18next
+    .use(Fetch)
+    .use(LanguageDetector)
+    .init({
+      fallbackLng: ['en'],
+      debug: true,
+      preload: ['en'],
+      keySeparator: false,
+      ns: ['menu'],
+      backend: {
+        loadPath: '/locales/{{lng}}/{{ns}}.json',
+      },
+      detection: {
+      }
+    }, (err, t) => {
+      console.log(err, t)
+    })
 
     server.use(router)
 

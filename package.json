@@ -25,6 +25,9 @@
     },
     "dependencies": {
         "fastclick": "^1.0.6",
+        "i18next": "^19.1.0",
+        "i18next-browser-languagedetector": "^4.0.1",
+        "i18next-fetch-backend": "^2.2.0",
         "kakapo": "^4.0.4",
         "marko": "^4.18.39",
         "redux": "^4.0.5",

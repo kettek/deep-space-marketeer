@@ -1,0 +1,11 @@
+{
+  "description": "The universe is dominated by inter-system trade, smuggling, and piracy. You, having spent your life bound to your home planet, have finally saved up enough money for a basic runner-class ship. A new world awaits you, filled with danger, adventure, and most of all, wealth!",
+  "button.back": "back",
+  "button.embark": "embark",
+  "button.continue": "continue",
+  "button.cancel": "cancel",
+  "button.confirm": "confirm",
+  "button.delete": "delete",
+  "label.captain": "captain",
+  "label.ship": "ship"
+}
