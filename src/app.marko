@@ -1,5 +1,6 @@
 import store from './store'
 import { router, server } from './api'
+import { slotsDB } from './db'
 
 import i18next from 'i18next'
 import Fetch from 'i18next-fetch-backend';
@@ -18,6 +19,15 @@ class {
       }
     }
 
+    // DB Setup
+    pending++
+    slotsDB.keys().then(keys => {
+      loadStep()
+    }).catch(e => {
+      console.log(e)
+    })
+
+    // Internationalization Setup
     pending++
     i18next
     .use(Fetch)
@@ -39,8 +49,6 @@ class {
     })
 
     server.use(router)
-
-    // TODO: Implement requesting file system & create saves
   }
   onMount() {
     store.subscribe(() => {
