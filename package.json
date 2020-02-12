@@ -29,6 +29,7 @@
         "i18next-browser-languagedetector": "^4.0.1",
         "i18next-fetch-backend": "^2.2.0",
         "kakapo": "^4.0.4",
+        "localforage": "^1.7.3",
         "marko": "^4.18.39",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
