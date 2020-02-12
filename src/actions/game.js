@@ -1,49 +1,47 @@
 import createPlayer from 'factories/player'
+import { slotsDB } from '../db'
 
 export const START_GAME = 'START_GAME'
-export function startGame(saveName, shouldCreate=false) {
+export function startGame(saveName, playerData={}) {
   return function(dispatch, getState) {
     let state = getState()
     if (state.game.inGame) {
       return
     }
-    // TODO: ... load file into nativestorage?
-    /*promisify(window.resolveLocalFileSystemURL)(cordova.file.dataDirectory)
-    .then(fs => promisify(fs.getFile.bind(fs))(`saves/${saveName}.json`, {create: shouldCreate}))
-    .then(fileEntry => {
-      if (shouldCreate) {
-        fileEntry.createWriter(fw => {
-          fw.onwriteend = (e) => {
-            dispatch(startGame(saveName))
-          }
-          fw.onerror = err => {
-            throw err
-          }
-          let json = JSON.stringify(createPlayer())
-          let data = new Blob([json], {type: "application/json"})
-          fw.write(data)
+    // Re-dispatch with random date if saveName is empty.
+    if (saveName === '') {
+      dispatch(startGame(Date.now()+'', playerData))
+      return
+    }
+    // Otherwise attempt to load and/or create.
+    slotsDB.getItem(saveName)
+    .then(save => {
+      // Does not exist
+      if (save === null) {
+        slotsDB.setItem(saveName, createPlayer(playerData))
+        .then(v => {
+          console.log('saved', v)
+          dispatch(startGame(saveName, playerData))
         })
+      // Exists
       } else {
-        promisify(fileEntry.file.bind(fileEntry))()
-        .then(file => {
-          let fr = new FileReader()
-          fr.onloadend = () => {
-            let profile = JSON.parse(fr.result)
-            console.log(profile)
-            // TODO: dispatch START_GAME with loaded save profile in fr.result
-          }
-          fr.onerror = err => {
-            throw err
-          }
-          fr.readAsText(file)
-        })
+        console.log('launch with', save)
       }
     })
     .catch(err => {
-      if (err.code === FileError.NOT_FOUND_ERR) {
-        return dispatch(startGame(Date.now(), true))
-      }
-      console.error('startGame', err)
-    })*/
+      console.log(err)
+    })
   }
+}
+
+export function deleteGame(saveName) {
+  return new Promise((resolve, reject) => {
+    slotsDB.removeItem(saveName)
+    .then(_ => {
+      resolve()
+    })
+    .catch(err => {
+      reject(err)
+    })
+  })
 }

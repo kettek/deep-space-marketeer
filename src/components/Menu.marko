@@ -1,15 +1,17 @@
 import store from '../store'
-import { startGame } from 'actions/game'
+import { startGame, deleteGame } from 'actions/game'
 import i18next from 'i18next'
 import pkg from '../../package.json'
+import { slotsDB } from '../db'
 
 class {
   onCreate() {
     this.state = {
       loc: 'main',
+      slotKeys: [],
       slots: [],
       selectedSlot: -1,
-      pendingDeleteSlot: '',
+      selectedDeleteSlot: -1,
       closeStars: [],
       farStars: [],
       captainName: '',
@@ -58,30 +60,15 @@ class {
     this.refreshSaves()
   }
   refreshSaves() {
-    // TODO: Load saved files into slots.
-    /*window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
-      fs.getDirectory('saves', {create: false}, dir => {
-        let reader = dir.createReader()
-        reader.readEntries(entries => {
-          this.state.slots = []
-          entries.forEach(entry => {
-            if (entry.name.endsWith('.json')) {
-              let saveName = entry.name.slice(0, -5)
-              let exists = this.state.slots.indexOf(saveName)
-              if (exists === -1) {
-                this.state.slots.push(saveName)
-              }
-            }
-          })
-        }, err => {
-          console.log('err', err)
-        })
-      }, err => {
-        console.log('err', err)
+    slotsDB.keys().then(slotKeys => {
+      Promise.all(slotKeys.map(k=>slotsDB.getItem(k)))
+      .then(values => {
+        this.state.slotKeys = slotKeys
+        this.state.slots = values
       })
-    }, err => {
-      console.log('main dir err', err)
-    })*/
+    }).catch(e => {
+      console.log('err', e)
+    })
   }
   handleMain(act) {
     this.state.loc = act
@@ -90,7 +77,9 @@ class {
   }
   handleEmbark(act) {
     if (act === 'embark') {
-      store.dispatch(startGame(''))
+      store.dispatch(startGame('', {
+        userName: this.state.captainName
+      }))
     } else if (act === 'back') {
       this.state.loc = 'main'
     }
@@ -100,33 +89,24 @@ class {
       this.state.loc = 'main'
     } else if (act === 'embark') {
       if (this.state.selectedSlot < 0 || this.state.selectedSlot >= this.state.slots.length) return
-      store.dispatch(startGame(this.state.slots[this.state.selectedSlot]))
+      store.dispatch(startGame(this.state.slotKeys[this.state.selectedSlot]))
     }
   }
   handleSlotSelect(which) {
     this.state.selectedSlot = which
   }
-  toggleDeleteMode(slotName) {
-    if (slotName === this.state.pendingDeleteSlot) {
-      this.state.pendingDeleteSlot = ''
+  toggleDeleteMode(which) {
+    if (this.state.selectedDeleteSlot === which) {
+      this.state.selectedDeleteSlot = -1
     } else {
-      this.state.pendingDeleteSlot = slotName
+      this.state.selectedDeleteSlot = which
     }
   }
-  deleteSlot(slotName) {
-    /*window.resolveLocalFileSystemURL(cordova.file.dataDirectory, fs => {
-      fs.getFile(`saves/${slotName}.json`, {create: false}, fileEntry => {
-        fileEntry.remove(ok => {
-          this.refreshSaves()
-        }, err => {
-          console.log('deleteSlot', err)
-        })
-      }, err => {
-        console.log('deleteSlot', err)
-      })
-    }, err => {
-      console.log('deleteSlot', err)
-    })*/
+  deleteSlot(which) {
+    deleteGame(this.state.slotKeys[which]).then(_ => {
+      this.refreshSaves()
+      this.state.selectedDeleteSlot = -1
+    })
   }
 }
 
@@ -290,14 +270,14 @@ section.Menu
       button.Menu__item on-click('handleEmbark', 'embark') -- ${i18next.t('menu:button.embark')}
   Frame active=(state.loc === 'continue') slide='left' class='Menu__Continue'
     div.Slots
-      for|slotName, slotIndex| of=state.slots
+      for|slot, slotIndex| of=state.slots
         div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
-          div.Slots__item__name -- ${slotName}
-          if(state.pendingDeleteSlot === slotName)
-            button.Slots__item__cancel on-click('toggleDeleteMode', slotName) -- ${i18next.t('menu:button.cancel')}
-            button.Slots__item__confirm on-click('deleteSlot', slotName) -- ${i18next.t('menu:button.confirm')}
+          div.Slots__item__name -- ${slot.userPrefix} ${slot.userName} ${slot.userSuffix}
+          if(state.selectedDeleteSlot === slotIndex)
+            button.Slots__item__cancel on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.cancel')}
+            button.Slots__item__confirm on-click('deleteSlot', slotIndex) -- ${i18next.t('menu:button.confirm')}
           else
-            button.Slots__item__delete on-click('toggleDeleteMode', slotName) -- ${i18next.t('menu:button.delete')}
+            button.Slots__item__delete on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.delete')}
     nav.Menu__pair
       button.Menu__item on-click('handleContinue', 'back') -- ${i18next.t('menu:button.back')}
       button.Menu__item on-click('handleContinue', 'embark') -- ${i18next.t('menu:button.embark')}
