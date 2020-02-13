@@ -14,7 +14,7 @@ class {
       selectedDeleteSlot: -1,
       closeStars: [],
       farStars: [],
-      captainName: '',
+      userName: '',
     }
     this.captains = [
       'Picard',
@@ -72,13 +72,14 @@ class {
   }
   handleMain(act) {
     this.state.loc = act
-    this.state.captainName = this.captains[Math.floor(Math.random()*this.captains.length)]
+    this.state.userName = this.captains[Math.floor(Math.random()*this.captains.length)]
     if (act === 'continue') this.refreshSaves()
   }
   handleEmbark(act) {
     if (act === 'embark') {
+      let userName = this.getEl('userName').value || this.state.userName
       store.dispatch(startGame('', {
-        userName: this.state.captainName
+        userName,
       }))
     } else if (act === 'back') {
       this.state.loc = 'main'
@@ -261,10 +262,10 @@ section.Menu
     div.Menu__inputs
       label
         span -- ${i18next.t('menu:label.captain')}
-        input placeholder=state.captainName
+        input type='text' placeholder=state.userName key='userName'
       label
         span -- ${i18next.t('menu:label.ship')}
-        input placeholder='Runner'
+        input type='text' placeholder='Runner' key='shipName'
     nav.Menu__pair
       button.Menu__item on-click('handleEmbark', 'back') -- ${i18next.t('menu:button.back')}
       button.Menu__item on-click('handleEmbark', 'embark') -- ${i18next.t('menu:button.embark')}
