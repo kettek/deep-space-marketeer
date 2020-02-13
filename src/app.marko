@@ -77,6 +77,17 @@ style {
     font-size: 1em;
     padding: .5em;
   }
+  input[type=text], input[type=number] {
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    border: 0;
+    margin: .25em;
+  }
+  input[type=text]:focus, input[type=number]:focus {
+    background: rgba(0, 0, 0, 0.75);
+    text-shadow: 0 0 1em green;
+    box-shadow: 0 0 .1em white;
+  }
   button {
     font-size: 1em;
     padding: .5em;
