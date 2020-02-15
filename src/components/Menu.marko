@@ -8,6 +8,7 @@ class {
   onCreate() {
     this.state = {
       loc: 'main',
+      prevLoc: '',
       slotKeys: [],
       slots: [],
       selectedSlot: -1,
@@ -70,9 +71,13 @@ class {
       console.log('err', e)
     })
   }
+  setLoc(loc) {
+    this.state.prevLoc = this.state.loc
+    this.state.loc = loc
+    console.log(this.state.prevLoc, this.state.loc)
+  }
   handleMain(act) {
     this.state.loc = act
-    this.state.userName = this.captains[Math.floor(Math.random()*this.captains.length)]
     if (act === 'continue') this.refreshSaves()
   }
   handleEmbark(act) {
@@ -82,15 +87,19 @@ class {
         userName,
       }))
     } else if (act === 'back') {
-      this.state.loc = 'main'
+      this.setLoc('continue')
+      this.refreshSaves()
     }
   }
   handleContinue(act) {
     if (act === 'back') {
-      this.state.loc = 'main'
+      this.setLoc('main')
     } else if (act === 'embark') {
       if (this.state.selectedSlot < 0 || this.state.selectedSlot >= this.state.slots.length) return
       store.dispatch(startGame(this.state.slotKeys[this.state.selectedSlot]))
+    } else if (act === 'new') {
+      this.state.userName = this.captains[Math.floor(Math.random()*this.captains.length)]
+      this.setLoc('embark')
     }
   }
   handleSlotSelect(which) {
@@ -191,12 +200,70 @@ style {
     grid-template-rows: auto auto auto;
     grid-gap: 1em;
   }
+  .Menu__Continue {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-gap: 1em;
+  }
   .Slots {
+    text-align: center;
+
+    overflow: auto;
   }
   .Slots__item {
+    position: relative;
+    width: 30vmin;
+    height: 30vmin;
+    padding: .5em;
+    margin: .5em;
+
+    display: inline-grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    vertical-align: top;
+
+    text-shadow: 0 0 1em blue;
+    box-shadow: 0 0 .1em white;
+    background: rgba(0, 0, 0, 0.75);
   }
   .Slots__item.-selected {
     border: 1px solid red;
+  }
+  .Slots__item button {
+    font-size: 3vmin;
+    margin: 0;
+  }
+  .Slots__item__delete {
+  }
+  button.Slots__item__add {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+    border: 0;
+  }
+  button.Slots__item__add::before {
+    display: block;
+    content: '';
+    position: absolute;
+    background: white;
+    top: 25%;
+    margin-left: -6.25%;
+    left: 50%;
+    width: 12.5%;
+    height: 50%;
+  }
+  button.Slots__item__add::after {
+    display: block;
+    content: '';
+    position: absolute;
+    background: white;
+    top: 50%;
+    margin-top: -6.25%;
+    left: 25%;
+    width: 50%;
+    height: 12.5%;
   }
   /* shiny stuff */
   .Menu__stars {
@@ -257,8 +324,7 @@ section.Menu
         div.Menu__star style={left: star.left+'vw', top: 100+star.top+'vh', width: star.size+'vmin', height: star.size+'vmin', opacity: star.opacity}
   Frame active=(state.loc === 'main') slide='right' duration=300 class='Menu__Main'
     header
-    button.Menu__item on-click('handleMain', 'embark') -- ${i18next.t('menu:button.embark')}
-    button.Menu__item on-click('handleMain', 'continue') -- ${i18next.t('menu:button.continue')}
+    button.Menu__item on-click('handleMain', 'continue') -- ${i18next.t('menu:button.embark')}
     footer -- ${pkg.copyright}
   Frame active=(state.loc === 'embark') slide='left' class='Menu__Embark'
     div.Menu__description -- ${i18next.t('menu:description')}
@@ -272,16 +338,19 @@ section.Menu
     nav.Menu__pair
       button.Menu__item on-click('handleEmbark', 'back') -- ${i18next.t('menu:button.back')}
       button.Menu__item on-click('handleEmbark', 'embark') -- ${i18next.t('menu:button.embark')}
-  Frame active=(state.loc === 'continue') slide='left' class='Menu__Continue'
+  Frame active=(state.loc === 'continue') slide=(state.prevLoc === 'embark' || state.loc === 'embark' ? 'right' : 'left') class='Menu__Continue'
     div.Slots
       for|slot, slotIndex| of=state.slots
         div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
           div.Slots__item__name -- ${slot.userPrefix} ${slot.userName} ${slot.userSuffix}
-          if(state.selectedDeleteSlot === slotIndex)
-            button.Slots__item__cancel on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.cancel')}
-            button.Slots__item__confirm on-click('deleteSlot', slotIndex) -- ${i18next.t('menu:button.confirm')}
-          else
-            button.Slots__item__delete on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.delete')}
+          div
+            if(state.selectedDeleteSlot === slotIndex)
+              button.Slots__item__cancel on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.cancel')}
+              button.Slots__item__confirm on-click('deleteSlot', slotIndex) -- ${i18next.t('menu:button.confirm')}
+            else
+              button.Slots__item__delete on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.delete')}
+      div.Slots__item
+        button.Slots__item__add on-click('handleContinue', 'new') -- ＋
     nav.Menu__pair
       button.Menu__item on-click('handleContinue', 'back') -- ${i18next.t('menu:button.back')}
       button.Menu__item on-click('handleContinue', 'embark') -- ${i18next.t('menu:button.embark')}
