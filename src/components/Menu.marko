@@ -94,9 +94,12 @@ class {
     }
   }
   handleSlotSelect(which) {
+    if (this.state.selectedSlot === which) return
     this.state.selectedSlot = which
+    this.state.selectedDeleteSlot = -1
   }
   toggleDeleteMode(which) {
+    this.handleSlotSelect(which)
     if (this.state.selectedDeleteSlot === which) {
       this.state.selectedDeleteSlot = -1
     } else {
