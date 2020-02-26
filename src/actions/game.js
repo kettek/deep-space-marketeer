@@ -1,5 +1,6 @@
 import createPlayer from 'factories/player'
 import { slotsDB } from '../db'
+import '../helpers/time'
 
 export const START_GAME = 'START_GAME'
 export function startGame(saveName, playerData={}) {
@@ -10,7 +11,7 @@ export function startGame(saveName, playerData={}) {
     }
     // Re-dispatch with random date if saveName is empty.
     if (saveName === '') {
-      dispatch(startGame(Date.now()+'', playerData))
+      dispatch(startGame(new Date().toSEString(), playerData))
       return
     }
     // Otherwise attempt to load and/or create.

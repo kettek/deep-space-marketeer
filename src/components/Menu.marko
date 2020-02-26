@@ -220,7 +220,7 @@ style {
 
     display: inline-grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: 1fr auto auto;
     vertical-align: top;
 
     text-shadow: 0 0 1em blue;
@@ -344,6 +344,7 @@ section.Menu
       for|slot, slotIndex| of=state.slots
         div.Slots__item class={'-selected': state.selectedSlot===slotIndex} on-click('handleSlotSelect', slotIndex)
           div.Slots__item__name -- ${slot.userPrefix} ${slot.userName} ${slot.userSuffix}
+          div.Slots__item__date -- ${state.slotKeys[slotIndex]} SE
           div
             if(state.selectedDeleteSlot === slotIndex)
               button.Slots__item__cancel on-click('toggleDeleteMode', slotIndex) -- ${i18next.t('menu:button.cancel')}
