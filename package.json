@@ -14,12 +14,12 @@
     "author": "Ketchetwahmeegwun T. Southall",
     "license": "GPLv3",
     "devDependencies": {
-        "@marko/webpack": "^2.1.0",
+        "@marko/webpack": "^5.0.3",
         "css-loader": "^3.4.2",
         "mini-css-extract-plugin": "^0.9.0",
         "style-loader": "^1.1.3",
-        "webpack": "^4.41.5",
-        "webpack-cli": "^3.3.10",
+        "webpack": "^4.42.1",
+        "webpack-cli": "^3.3.11",
         "webpack-dev-server": "^3.10.3",
         "webpack-serve": "^3.2.0"
     },
@@ -30,7 +30,7 @@
         "i18next-fetch-backend": "^2.2.0",
         "kakapo": "^4.0.4",
         "localforage": "^1.7.3",
-        "marko": "^4.18.39",
+        "marko": "^4.19.9",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
         "seedrandom": "^3.0.5"
