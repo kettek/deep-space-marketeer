@@ -1,4 +1,4 @@
-import { ENTER_GALAXY } from 'actions/game'
+import { ENTER_GALAXY, CREATE_GAME, DELETE_GAME, SET_GAME } from 'actions/game'
 
 function game(state = {
   inGame: false,
@@ -7,12 +7,25 @@ function game(state = {
 }, action) {
   console.log('game reducer', action)
   switch (action.type) {
+    case CREATE_GAME:
+      return {
+        ...state,
+      }
+    case SET_GAME:
+      return {
+        ...state,
+        saveSlot: action.slot,
+        ...action.data,
+      }
+    case DELETE_GAME:
+      return {
+        ...state,
+      }
     case ENTER_GALAXY:
       console.log('entering galaxy')
       return {
         ...state,
         ...{
-          saveSlot: action.saveSlot,
           inGame: true,
         }
       }

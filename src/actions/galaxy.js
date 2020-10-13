@@ -3,7 +3,7 @@ export const TRAVEL_TO_SYSTEM = 'TRAVEL_TO_SYSTEM'
 export function travelToSystem(system) {
   return function(dispatch, getState) {
     let state = getState()
-    let fuel = state.player.fuel
+    let fuel = state.game.player.fuel
     let currentSystem = state.system
     /*
     request(`galaxy/${state.galaxy.name}`)

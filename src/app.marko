@@ -52,7 +52,7 @@ class {
   }
   onMount() {
     this.unsubscribe = store.subscribe(() => {
-      console.log('store state update')
+      console.log('store state update', store.getState())
       this.forceUpdate()
     })
   }
