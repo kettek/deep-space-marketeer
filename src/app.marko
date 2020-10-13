@@ -51,9 +51,13 @@ class {
     server.use(router)
   }
   onMount() {
-    store.subscribe(() => {
+    this.unsubscribe = store.subscribe(() => {
+      console.log('store state update')
       this.forceUpdate()
     })
+  }
+  onDestroy() {
+    this.unsubscribe()
   }
 }
 
