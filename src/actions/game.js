@@ -4,7 +4,7 @@ import '../helpers/time'
 
 export const START_GAME = 'START_GAME'
 export function startGame(saveName, playerData={}) {
-  return function(dispatch, getState) {
+  return async function(dispatch, getState) {
     let state = getState()
     if (state.game.inGame) {
       return
@@ -15,23 +15,19 @@ export function startGame(saveName, playerData={}) {
       return
     }
     // Otherwise attempt to load and/or create.
-    slotsDB.getItem(saveName)
-    .then(save => {
-      // Does not exist
+    try {
+      let save = await slotsDB.getItem(saveName)
       if (save === null) {
-        slotsDB.setItem(saveName, createPlayer(playerData))
-        .then(v => {
-          console.log('saved', v)
-          dispatch(startGame(saveName, playerData))
-        })
-      // Exists
+        let v = await slotsDB.setItem(saveName, createPlayer(playerData))
+        console.log('saved', v)
+        dispatch(startGame(saveName, playerData))
       } else {
         console.log('launch with', save)
+        dispatch(enterGalaxy(save))
       }
-    })
-    .catch(err => {
+    } catch(err) {
       console.log(err)
-    })
+    }
   }
 }
 
@@ -45,4 +41,13 @@ export function deleteGame(saveName) {
       reject(err)
     })
   })
+}
+
+export const ENTER_GALAXY = 'ENTER_GALAXY'
+export function enterGalaxy(playerData={}) {
+  return async function(dispatch, getState) {
+    let state = getState()
+    state.game.inGame = true
+    console.log('in game with', playerData, state)
+  }
 }

@@ -1,4 +1,4 @@
-import { START_GAME } from 'actions/game'
+import { START_GAME, ENTER_GALAXY } from 'actions/game'
 
 function game(state = {
   inGame: false,
@@ -12,6 +12,14 @@ function game(state = {
         ...{
           saveSlot: action.saveSlot,
           inGame: false,
+        }
+      }
+    case ENTER_GALAXY:
+      return {
+        ...state,
+        ...{
+          saveSlot: action.saveSlot,
+          inGame: true,
         }
       }
     default:
