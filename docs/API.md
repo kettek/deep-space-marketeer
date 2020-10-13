@@ -20,3 +20,15 @@ API calls
   * galaxies/<galaxy-id>/planets/<planet-id>/shipyard/<ship-id>
     * GET load ship info
     * PUT trade in for ship?
+
+## Sector-based
+
+  * galaxies/<galaxy-id>/sectors
+  * galaxies/<galaxy-id>/sectors/<x>-<y>
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies/planets/<planet-id>/trade
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies/planets/<planet-id>/shipyard
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies/planets/<planet-id>/bar
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies/planets/<planet-id>/moons
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies/planets/<planet-id>/moons/<moon-id>
+  * galaxies/<galaxy-id>/sectors/<x>-<y>/bodies/stars
