@@ -1,5 +1,5 @@
 import store from '../store'
-import { startGame, deleteGame } from 'actions/game'
+import { newPlayer, deletePlayer, setPlayer } from 'actions/player'
 import i18next from 'i18next'
 import pkg from '../../package.json'
 import { slotsDB } from '../db'
@@ -83,7 +83,7 @@ class {
   handleEmbark(act) {
     if (act === 'embark') {
       let userName = this.getEl('userName').value || this.state.userName
-      store.dispatch(startGame('', {
+      store.dispatch(newPlayer('', {
         userName,
       }))
     } else if (act === 'back') {
@@ -96,7 +96,7 @@ class {
       this.setLoc('main')
     } else if (act === 'embark') {
       if (this.state.selectedSlot < 0 || this.state.selectedSlot >= this.state.slots.length) return
-      store.dispatch(startGame(this.state.slotKeys[this.state.selectedSlot]))
+      store.dispatch(newPlayer(this.state.slotKeys[this.state.selectedSlot]))
     } else if (act === 'new') {
       this.state.userName = this.captains[Math.floor(Math.random()*this.captains.length)]
       this.setLoc('embark')
@@ -116,7 +116,7 @@ class {
     }
   }
   deleteSlot(which) {
-    deleteGame(this.state.slotKeys[which]).then(_ => {
+    deletePlayer(this.state.slotKeys[which]).then(_ => {
       this.refreshSaves()
       this.state.selectedDeleteSlot = -1
     })

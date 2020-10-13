@@ -1,20 +1,14 @@
-import { START_GAME, ENTER_GALAXY } from 'actions/game'
+import { ENTER_GALAXY } from 'actions/game'
 
 function game(state = {
   inGame: false,
   isOffline: true, // Reserved for future use
   saveSlot: 0,
 }, action) {
+  console.log('game reducer', action)
   switch (action.type) {
-    case START_GAME:
-      return {
-        ...state,
-        ...{
-          saveSlot: action.saveSlot,
-          inGame: false,
-        }
-      }
     case ENTER_GALAXY:
+      console.log('entering galaxy')
       return {
         ...state,
         ...{
